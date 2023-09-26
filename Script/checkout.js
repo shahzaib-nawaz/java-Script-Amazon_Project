@@ -16,7 +16,8 @@ cart.forEach((cartItem)=>{
     cartSummaryHTML+=
 
     `
-    <div class="cart-item-container">
+    <div class="cart-item-container 
+    js-cart-item-container-${macthingProduct.id}">
     <div class="delivery-date">
       Delivery date: Wednesday, June 15
     </div>
@@ -99,8 +100,10 @@ cart.forEach((cartItem)=>{
     link.addEventListener('click',() =>{
         const productId = link.dataset.productId;
         RemoveFromCart(productId);
-        console.log(cart);
+        const container = document.querySelector(`.js-cart-item-container-${productId}`);
+        
+        container.remove();
 
-    })
+    });
 
- })
+ });
