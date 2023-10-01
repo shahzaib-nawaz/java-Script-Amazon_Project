@@ -16,7 +16,10 @@ function saveToStorage(){
 
  export function AddToCart(productId){
     let matchingItem;  
-    cart.forEach((cartitem)=>{
+   
+      cart.forEach((cartitem)=>{
+       
+          
         if(productId === cartitem.productId ){
             matchingItem =cartitem;
         }

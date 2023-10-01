@@ -1,10 +1,13 @@
 import{cart ,RemoveFromCart} from '../data/cart.js';
 import{products} from '../data/products.js';
-import{cartQuantityHTML} from './amazon.js';
-
-
-// import{CartQuantity} from './script/amazon.js';
 let cartSummaryHTML='';
+let totalAmount=0;
+let shippingAmount=0;
+let AmountWithOutTax=0;
+function updateAmount(totalAmount){
+   let Amount =totalAmount;
+
+};
 
 cart.forEach((cartItem)=>{
     const productId = cartItem.productId;
@@ -16,6 +19,12 @@ cart.forEach((cartItem)=>{
        
 
     });
+    totalAmount+= macthingProduct.priceCents*cartItem.quantity;
+    shippingAmount = ((totalAmount)*.05);
+    AmountWithOutTax = totalAmount+shippingAmount;
+    
+
+    
     
     cartSummaryHTML+=
 
@@ -35,7 +44,7 @@ cart.forEach((cartItem)=>{
         ${macthingProduct.name}
     </div>
     <div class="product-price">
-        ${(macthingProduct.priceCents/100).toFixed(2)}
+        $${(macthingProduct.priceCents/100).toFixed(2)}
     </div>
     <div class="product-quantity">
         <span>
@@ -96,9 +105,12 @@ cart.forEach((cartItem)=>{
     </div>
 
     `;
+    
+
 
 });
  document.querySelector('.order-summary').innerHTML =cartSummaryHTML;
+ 
 
  
  
@@ -107,11 +119,92 @@ cart.forEach((cartItem)=>{
     link.addEventListener('click',() =>{
         const productId = link.dataset.productId;
         RemoveFromCart(productId);
+        updateCartQuantity();
+        
         const container = document.querySelector(`.js-cart-item-container-${productId}`);
         
         container.remove();
+        updateAmount(totalAmount);
 
     });
 
  });
+ let cartQuantity = 0;
+function updateCartQuantity() {
+  let cartQuantity = 0;
+ 
+
+cart.forEach((cartItem) => {
+  cartQuantity += cartItem.quantity;
+});
+document.querySelector('.js-return-to-home-link')
+  .innerHTML = `${cartQuantity} items`;
+
+}
+updateCartQuantity();
+
+
+
+
+document.querySelectorAll('.place-order-button').forEach((button)=>{
+    button.addEventListener('click',() =>{
+        document.querySelector('.place-order-button').innerHTML='Order Placed';
+    });
+});
+
+function paymentSummary(){
+document.querySelector('.payment-summary').innerHTML=`
+<div class="payment-summary-title">
+  Order Summary
+</div>
+
+<div class="payment-summary-row">
+  <div>Items (${cartQuantity}):</div>
+  <div class="payment-summary-money">$${(totalAmount/100).toFixed(2)}</div>
+</div>
+
+<div class="payment-summary-row">
+  <div>Shipping &amp; handling:</div>
+  <div class="payment-summary-money">$${(shippingAmount/100).toFixed(2)}</div>
+</div>
+
+<div class="payment-summary-row subtotal-row">
+  <div>Total before tax:</div>
+  <div class="payment-summary-money">$${(AmountWithOutTax/100).toFixed(2)}</div>
+</div>
+
+<div class="payment-summary-row">
+  <div>Estimated tax (10%):</div>
+  <div class="payment-summary-money">$${((AmountWithOutTax*.1)/100).toFixed(2)}</div>
+</div>
+
+<div class="payment-summary-row total-row">
+  <div>Order total:</div>
+  <div class="payment-summary-money">$${(((AmountWithOutTax*.1)+(AmountWithOutTax))/100).toFixed(2)}</div>
+</div>
+
+<button class="place-order-button button-primary">
+  Place your order
+</button>
+
+`;}
+paymentSummary();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+ 
+ 
+
  
